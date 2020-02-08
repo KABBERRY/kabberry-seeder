@@ -35,7 +35,7 @@ public:
   CDnsSeedOpts() : nThreads(96), nDnsThreads(4), nPort(53), mbox(NULL), ns(NULL), host(NULL), tor(NULL), fUseTestNet(false), fWipeBan(false), fWipeIgnore(false), ipv4_proxy(NULL), ipv6_proxy(NULL) {}
 
   void ParseCommandLine(int argc, char **argv) {
-    static const char *help = "Bitcoin-seeder\n"
+    static const char *help = "Kabberry-seeder\n"
                               "Usage: %s -h <host> -n <ns> [-m <mbox>] [-t <threads>] [-p <port>]\n"
                               "\n"
                               "Options:\n"
@@ -187,7 +187,7 @@ extern "C" void* ThreadCrawler(void* data) {
       res.nClientV = 0;
       res.nHeight = 0;
       res.strClientV = "";
-      bool getaddr = res.ourLastSuccess + 86400 < now;
+      bool getaddr = res.ourLastSuccess + 3600 < now;
       res.fGood = TestNode(res.service,res.nBanTime,res.nClientV,res.strClientV,res.nHeight,getaddr ? &addr : NULL);
     }
     db.ResultMany(ips);
@@ -401,17 +401,15 @@ extern "C" void* ThreadStats(void*) {
   return nullptr;
 }
 
-static const string mainnet_seeds[] = {"dnsseed.bluematt.me", "bitseed.xf2.org", "dnsseed.bitcoin.dashjr.org", "seed.bitcoin.sipa.be", ""};
-static const string testnet_seeds[] = {"testnet-seed.alexykot.me",
-                                       "testnet-seed.bitcoin.petertodd.org",
-                                       "testnet-seed.bluematt.me",
-                                       "testnet-seed.bitcoin.schildbach.de",
-                                       ""};
+static const string mainnet_seeds[] = {"77.55.217.107", "85.214.195.80", "113.172.159.114", "157.52.132.114",
+"217.61.15.235", "51.158.169.117", "116.202.22.107", "54.37.136.188", "95.216.32.169", "217.113.230.235", "138.197.159.130", "37.248.158.15", "95.23.221.19", "108.53.203.246", "27.74.73.136", "84.17.57.117",
+"116.202.18.29", "167.86.106.5", "95.216.39.151", "217.61.15.235", "185.118.167.50", "77.240.103.246", "31.6.221.252", "89.65.101.63", "70.235.89.59", "77.55.235.218", ""};
+static const string testnet_seeds[] = {""};
 static const string *seeds = mainnet_seeds;
 
 extern "C" void* ThreadSeeder(void*) {
   if (!fTestNet){
-    db.Add(CService("kjy2eqzk4zwi5zd3.onion", 8333), true);
+    db.Add(CService("77.55.216.249", 34124), true);
   }
   do {
     for (int i=0; seeds[i] != ""; i++) {
@@ -463,10 +461,10 @@ int main(int argc, char **argv) {
   bool fDNS = true;
   if (opts.fUseTestNet) {
       printf("Using testnet.\n");
-      pchMessageStart[0] = 0x0b;
-      pchMessageStart[1] = 0x11;
-      pchMessageStart[2] = 0x09;
-      pchMessageStart[3] = 0x07;
+      pchMessageStart[0] = 0x90;
+      pchMessageStart[1] = 0xc4;
+      pchMessageStart[2] = 0xfd;
+      pchMessageStart[3] = 0xe9;
       seeds = testnet_seeds;
       fTestNet = true;
   }
